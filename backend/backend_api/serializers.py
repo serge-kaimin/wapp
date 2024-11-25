@@ -84,3 +84,7 @@ class SettingsResponseSerializer(serializers.Serializer):
     # string: Получать уведомления об удалении сообщений, возможные значения: yes, no
     deletedMessageWebhook = serializers.CharField(max_length=10)
 
+# https://green-api.com/docs/api/account/GetStateInstance/
+class StateInstanceResponseSerializer(serializers.Serializer):
+    stateInstance = serializers.CharField(max_length=100)
+
