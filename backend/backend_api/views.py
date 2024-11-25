@@ -14,6 +14,9 @@ class YourModelViewSet(viewsets.ModelViewSet):
     serializer_class = YourModelSerializer
 
 
+# getSetting
+# GET {{apiUrl}}/waInstance{{idInstance}}/getSettings/{{apiTokenInstance}}
+# Return settings for the WhatsApp instance
 # Required parameters:
 #  - idInstance
 #  - apiTokenInstance
@@ -51,7 +54,15 @@ def get_setting(request):
     else:
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+# getStateInstance
+# GET {{apiUrl}}/waInstance{{idInstance}}/getStateInstance/{{apiTokenInstance}}
+# Return the state of the WhatsApp instance
+# Required parameters:
+#  - idInstance
+#  - apiTokenInstance
+# Example response:
+# { "stateInstance": "authorized" }
+# Reference: https://green-api.com/docs/api/account/GetStateInstance/
 @require_GET
 def get_state_instance(request):
 
