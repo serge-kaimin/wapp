@@ -9,8 +9,8 @@ class YourModelSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class RequestSerializer(serializers.Serializer):
-    id_instance = serializers.CharField(max_length=100)
-    api_token_instance = serializers.CharField(max_length=100)
+    id_instance = serializers.CharField(max_length=100, required=True)
+    api_token_instance = serializers.CharField(max_length=100, required=True)
 
 def validate_yes_no(value):
     choices = ['yes', 'no']
@@ -84,7 +84,11 @@ class SettingsResponseSerializer(serializers.Serializer):
     # string: Получать уведомления об удалении сообщений, возможные значения: yes, no
     deletedMessageWebhook = serializers.CharField(max_length=10)
 
-# https://green-api.com/docs/api/account/GetStateInstance/
+# Example:
+# {
+#    "stateInstance": "authorized"
+#}
+# reference: https://green-api.com/docs/api/account/GetStateInstance/
 class StateInstanceResponseSerializer(serializers.Serializer):
     # Состояние инстанса. Принимает значения:
     # notAuthorized - Инстанс не авторизован.
@@ -95,3 +99,21 @@ class StateInstanceResponseSerializer(serializers.Serializer):
     # yellowCard - На инстансе частично или полностью приостановлена отправка сообщений из-за спамерской активности. Сообщения отправленные после получения статуса хранятся в очереди к отправке 24 часа. Для продолжения работы инстанса требуется сделать перезагрузку инстанса
     stateInstance = serializers.CharField(max_length=100)
 
+# Example:
+# {
+#    "chatId": "11001234567@с.us",
+#    "message": "I use Green-API to send this message to you!",
+#    "quotedMessageId": "361B0E63F2FDF95903B6A9C9A102F34B"
+#}
+class SendMessageRequestSerializer(serializers.Serializer):
+    chatId = serializers.CharField(max_length=100, required=True)
+    message = serializers.CharField(max_length=1000, required=True)
+    quotedMessageId = serializers.CharField(max_length=100, allow_blank=True, required=False)
+    linkPreview = serializers.CharField(max_length=10, allow_blank=True, required=False)
+
+# Example:
+# {
+#    "idMessage": "3EB0C767D097B7C7C030"
+# }
+class SendMessageResponseSerializer(serializers.Serializer):
+    idMessage = serializers.CharField(max_length=100)
