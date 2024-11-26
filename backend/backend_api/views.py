@@ -9,8 +9,8 @@ from rest_framework import status
 from rest_framework.response import Response  # Import Response
 from backend_api.models import YourModel  # Use absolute import
 from backend_api.serializers import YourModelSerializer  # Use absolute import
-from backend_api.api_utils import get_settings_from_api, get_state_instance_from_api, post_message
-from .serializers import RequestSerializer, SendMessageRequestSerializer
+from backend_api.api_utils import get_settings_from_api, get_state_instance_from_api, post_message, download_media_by_url, send_file_to_api
+from .serializers import RequestSerializer, SendMessageRequestSerializer, SendFileByUrlRequestSerializer
 
 class YourModelViewSet(viewsets.ModelViewSet):
     queryset = YourModel.objects.all()
@@ -153,6 +153,78 @@ def send_message(request):
         if response['status'] == status.HTTP_200_OK:
             return JsonResponse(response)        
         return JsonResponse({'error': response['error']}, status=response['status'])
+    
+    else:
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# send_file_by_url
+# POST {{mediaUrl}}/waInstance{{idInstance}}/sendFileByUpload/{{apiTokenInstance}}
+# Send a file from the WhatsApp instance using a URL
+# Required parameters:
+#  - idInstance
+#  - apiTokenInstance
+#  - chatId
+#  - url
+# Example response:
+# {
+#    "idMessage": "3EB0C767D097B7C7C030",
+#    "urlFile": "https://sw-media-out.storage.yandexcloud.net/1101776123/c1aabd48-c1c2-49b1-8f2d-f575a41777be.jpg"
+# }
+@csrf_exempt
+@require_POST
+def send_file_by_url(request):
+    id_instance = request.headers.get('idInstance')
+    api_token_instance = request.headers.get('apiTokenInstance')
+
+    if not id_instance or not api_token_instance:
+        return JsonResponse( 
+            {
+            'error': 'One ot two mandatory parameters are missing: idInstance and idInstance'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+    
+    chat_id = request.POST.get('chatId', '').replace('"', '')
+    urlFile = request.POST.get('urlFile')
+    caption = request.POST.get('caption', '')
+    
+    url_filename = request.POST.get('fileName', '')
+    if url_filename == '':
+        url_filename = urlFile.split('/')[-1]
+        # TODO: detect media format and set the filename accordingly [webp, jpg, png, mp4, etc]
+        # for example the media type for the url is webp
+        # https://avatars.mds.yandex.net/get-pdb/477388/77f64197-87d2-42cf-9305-14f49c65f1da/s375 
+    
+    request_data = {
+        'chatId': chat_id,
+        'urlFile': urlFile,
+        'fileName': url_filename,
+    }
+    if caption != '':
+        request_data['caption'] = caption
+
+    logger.info(f"Request to send_file_by_url received: {request_data}")
+
+    serializer = SendFileByUrlRequestSerializer(data=request_data)
+    if serializer.is_valid():
+
+        # Download a file from the urlFile
+        media_response = download_media_by_url(serializer.validated_data['urlFile'])
+        if media_response['status'] != status.HTTP_200_OK:
+            return JsonResponse({'error': media_response['error']}, status=media_response['status'])
+
+        MEDIA_FILE_LIMIT=102400 # 100kb
+        media_data = media_response.get('media')
+        media_size = len(media_data)
+        logger.info(f"Meia file downloaded: {url_filename}, [{media_size} bytes] ")
+        if media_size == 0:
+            return JsonResponse({'error': 'Media file is empty'}, status=status.HTTP_400_BAD_REQUEST)
+        if media_size > MEDIA_FILE_LIMIT:
+            return JsonResponse({'error': 'Media file is too large limit is {MEDIA_FILE_LIMIT} bytes'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        response = send_file_to_api(id_instance, api_token_instance, request_data)
+        if response['status'] == status.HTTP_200_OK:
+            return JsonResponse(response)
+        return JsonResponse({'error': response['error']}, status=response['status'])    
     
     else:
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

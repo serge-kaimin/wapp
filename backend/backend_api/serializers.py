@@ -117,3 +117,20 @@ class SendMessageRequestSerializer(serializers.Serializer):
 # }
 class SendMessageResponseSerializer(serializers.Serializer):
     idMessage = serializers.CharField(max_length=100)
+
+
+class SendFileByUrlRequestSerializer(serializers.Serializer):
+    chatId = serializers.CharField(max_length=100, required=True)
+    url = serializers.URLField(max_length=200, required=True)
+
+# - chatId
+# - urlFile
+# - fileName
+# - caption (optional)
+# - quotedMessageId (optional)
+class SendFileByUrlRequestSerializer(serializers.Serializer):
+    chatId = serializers.CharField(max_length=100, required=True)
+    urlFile = serializers.URLField(max_length=200, required=True)
+    fileName = serializers.CharField(max_length=100, required=True)
+    caption = serializers.CharField(max_length=1000, allow_blank=True, required=False)
+    quotedMessageId = serializers.CharField(max_length=100, allow_blank=True, required=False)
