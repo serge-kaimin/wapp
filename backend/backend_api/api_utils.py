@@ -1,4 +1,5 @@
 # backend_api/api_utils.py
+import os
 import requests
 import time
 import logging
@@ -9,8 +10,9 @@ from .serializers import SettingsResponseSerializer, StateInstanceResponseSerial
 from .errors import process_error
 # from rest_framework.response import Response  # Import Response
 
-API_URL = 'https://7103.api.greenapi.com'
-MEDIA_URL = 'https://7103.media.greenapi.com'
+API_URL = os.getenv('API_URL', 'https://7103.api.greenapi.com')
+#API_URL = 'https://7103.api.greenapi.com'
+#MEDIA_URL = 'https://7103.media.greenapi.com'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
