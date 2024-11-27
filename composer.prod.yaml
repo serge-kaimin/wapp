@@ -1,0 +1,16 @@
+
+name: app
+
+services:
+  wapp:
+    image: kaimin/wapp:0.0.1
+    environment:
+      - API_URL=${API_URL}
+      - DEBUG=${DEBUG}
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+# docker compose --file composer.prod.yaml up
+# docker compose --file composer.prod.yaml down
+# docker compose --file composer.prod.yaml logs --follow --tail 100
