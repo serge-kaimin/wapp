@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .column {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .left {
+    background-color: #f0f0f0;
+  }
+  
+  .right {
+    background-color: #ffffff;
+  }
