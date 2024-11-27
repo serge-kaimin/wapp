@@ -132,7 +132,7 @@ const TwoColumnLayout = () => {
           <div>
             <input
               type="text"
-              placeholder="37498076869@c.us"
+              placeholder="77771234567"
               maxLength="20"
               value={to}
               onChange={(e) => setTo(e.target.value)}
@@ -154,7 +154,7 @@ const TwoColumnLayout = () => {
           </div>
           <div>
             <input
-              placeholder="37498076869@c.us"
+              placeholder="77771234567"
               type="text"
               maxLength="20"
               value={to}
