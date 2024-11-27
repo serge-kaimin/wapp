@@ -188,11 +188,22 @@ def send_file_by_url(request):
             },
             status=status.HTTP_400_BAD_REQUEST)
     
-    chat_id = request.POST.get('chatId', '').replace('"', '')
-    urlFile = request.POST.get('urlFile')
-    caption = request.POST.get('caption', '')
+    try:
+        request_data = json.loads(request.body)
+        chat_id = request_data.get('chatId').replace('"', '')
+        urlFile = request_data.get('urlFile')
+        caption = request_data.get('caption', '')
+        url_filename = request_data.get('fileName', '')
+    except json.JSONDecodeError:
+        return JsonResponse(
+            {'error': 'Invalid JSON in request body'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
     
-    url_filename = request.POST.get('fileName', '')
+    # check if chat_id has number@*, if not add @c.us
+    if '@' not in chat_id:
+        chat_id = f"{chat_id}@c.us"   
+
     if url_filename == '':
         url_filename = urlFile.split('/')[-1]
         # TODO: detect media format and set the filename accordingly [webp, jpg, png, mp4, etc]

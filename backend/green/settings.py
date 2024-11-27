@@ -64,6 +64,9 @@ CORS_ALLOW_HEADERS = [
     'apitokeninstance',
     'message',
     'chatId',
+    'caption',
+    'urlFile',
+    'fileName',
 ]
 
 CSRF_TRUSTED_ORIGINS = [

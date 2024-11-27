@@ -73,8 +73,26 @@ const TwoColumnLayout = () => {
     }
   };
 
-  const handleSendFileByUrl = () => {
-    // Handle sendFileByUrl action
+  // Handle sendFileByUrl action
+  const handleSendFileByUrl = async () => {
+    try {
+      const response = await fetch(`${API_URL}/sendfilebyurl`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'idInstance': idInstance,
+          'apiTokenInstance': apiTokenInstance
+        },
+        body: JSON.stringify({
+          chatId: to,
+          urlFile: mediaUrl
+        })
+      });
+      const data = await response.json();
+      setOutput(JSON.stringify(data, null, 2));
+    } catch (error) {
+      setOutput(`Error: ${error.message}`);
+    }
   };
 
   return (
