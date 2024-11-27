@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 # Required parameters:
 #  - idInstance
 #  - apiTokenInstance
+@csrf_exempt
 @require_GET
 def get_setting(request):
 
@@ -70,6 +71,7 @@ def get_setting(request):
 # { "stateInstance": "authorized" }
 # Reference: https://green-api.com/docs/api/account/GetStateInstance/
 @require_GET
+@csrf_exempt
 def get_state_instance(request):
 
     id_instance = request.headers.get('idInstance')

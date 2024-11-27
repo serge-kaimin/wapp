@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./TwoColumnLayout.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const TwoColumnLayout = () => {
   const [idInstance, setIdInstance] = useState("");
   const [apiTokenInstance, setApiTokenInstance] = useState("");
@@ -9,8 +11,22 @@ const TwoColumnLayout = () => {
   const [mediaUrl, setMediaUrl] = useState("");
   const [output, setOutput] = useState("");
 
-  const handleGetSetting = () => {
-    // Handle getSetting action
+  // Handle getSetting action
+  const handleGetSetting = async () => {
+    try {
+      const response = await fetch(`${API_URL}/settings`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'idInstance': idInstance,
+          'apiTokenInstance': apiTokenInstance,
+        }
+      });
+      const data = await response.json();
+      setOutput(JSON.stringify(data, null, 2));
+    } catch (error) {
+      setOutput(`Error: ${error.message}`);
+    }
   };
 
   const handleGetStateInstance = () => {
