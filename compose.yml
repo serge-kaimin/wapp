@@ -6,7 +6,7 @@ services:
     image: wapp
     environment:
       - API_URL=${API_URL}
-      - MY_API=${MY_API}
+      - DEBUG=${DEBUG}
     ports:
       - "8000:8000"
     restart: unless-stopped

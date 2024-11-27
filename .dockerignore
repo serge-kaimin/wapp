@@ -1,0 +1,19 @@
+# Ignore node_modules directory
+node_modules
+
+# Ignore Python virtual environment directories
+venv
+__pycache__
+
+# Ignore other unnecessary files
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.mypy_cache
+.pytest_cache
+.coverage
+*.log
+*.sqlite3
+.DS_Store

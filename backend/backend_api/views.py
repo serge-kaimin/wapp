@@ -5,7 +5,6 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-from backend_api.serializers import YourModelSerializer  # Use absolute import
 from backend_api.api_utils import get_settings_from_api, get_state_instance_from_api, post_message, download_media_by_url, send_file_to_api
 from .serializers import RequestSerializer, SendMessageRequestSerializer, SendFileByUrlRequestSerializer
 
