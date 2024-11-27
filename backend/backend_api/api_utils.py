@@ -104,7 +104,7 @@ def get_state_instance_from_api(id_instance, api_token_instance):
     if response_data.status_code == status.HTTP_200_OK:
         try:
             response_json = response_data.json()
-            serializer = SettingsResponseSerializer(data=response_json)
+            serializer = StateInstanceResponseSerializer(data=response_json)
             if serializer.is_valid():
                 return {
                     'message': 'Success',
