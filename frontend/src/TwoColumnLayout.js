@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import './TwoColumnLayout.css';
+import React, { useState } from "react";
+import "./TwoColumnLayout.css";
 
 const TwoColumnLayout = () => {
-  const [idInstance, setIdInstance] = useState('');
-  const [apiTokenInstance, setApiTokenInstance] = useState('');
-  const [to, setTo] = useState('');
-  const [message, setMessage] = useState('');
-  const [mediaUrl, setMediaUrl] = useState('');
-  const [output, setOutput] = useState('');
+  const [idInstance, setIdInstance] = useState("");
+  const [apiTokenInstance, setApiTokenInstance] = useState("");
+  const [to, setTo] = useState("");
+  const [message, setMessage] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [output, setOutput] = useState("");
 
   const handleGetSetting = () => {
     // Handle getSetting action
@@ -28,56 +28,63 @@ const TwoColumnLayout = () => {
   return (
     <div className="container">
       <div className="column left">
-        <h2></h2>
         <form>
+          <p></p>
           <div>
-            <label>idInstance:</label>
             <input
+              placeholder="idInstance"
               type="text"
               value={idInstance}
               onChange={(e) => setIdInstance(e.target.value)}
             />
           </div>
           <div>
-            <label>ApiTokenInstance:</label>
             <input
+              placeholder="ApiTokenInstance"
               type="password"
               value={apiTokenInstance}
               onChange={(e) => setApiTokenInstance(e.target.value)}
             />
           </div>
+          <p> </p>
           <div>
             <p>
-            <button type="button" onClick={handleGetSetting}>getSetting</button>
+              <button type="button" onClick={handleGetSetting}>
+                getSetting
+              </button>
             </p>
             <p>
-            <button type="button" onClick={handleGetStateInstance}>getStateInstance</button>
+              <button type="button" onClick={handleGetStateInstance}>
+                getStateInstance
+              </button>
             </p>
           </div>
           <div>
-            <label>To:</label>
             <input
               type="text"
+              placeholder="77771234567"
               maxLength="20"
               value={to}
               onChange={(e) => setTo(e.target.value)}
             />
           </div>
           <div>
-            <label>Message:</label>
-            <input
-              type="text"
-              maxLength="100"
+          <textarea
+              placeholder="Hello, World!"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              rows="8"
+              className="message"
             />
           </div>
           <div>
-            <button type="button" onClick={handleSendMessage}>sendMessage</button>
+            <button type="button" onClick={handleSendMessage}>
+              sendMessage
+            </button>
           </div>
           <div>
-            <label>To:</label>
             <input
+              placeholder="77771234567"
               type="text"
               maxLength="20"
               value={to}
@@ -85,20 +92,22 @@ const TwoColumnLayout = () => {
             />
           </div>
           <div>
-            <label>Media URL:</label>
             <input
               type="url"
+              placeholder="https://my.site.com/img/horse.png"
               value={mediaUrl}
               onChange={(e) => setMediaUrl(e.target.value)}
             />
           </div>
           <div>
-            <button type="button" onClick={handleSendFileByUrl}>sendFileByUrl</button>
+            <button type="button" onClick={handleSendFileByUrl}>
+              sendFileByUrl
+            </button>
           </div>
         </form>
       </div>
       <div className="column right">
-        <h2>Response</h2>
+        <h2>Response:</h2>
         <textarea
           value={output}
           onChange={(e) => setOutput(e.target.value)}
