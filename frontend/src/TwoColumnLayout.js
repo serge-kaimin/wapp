@@ -47,8 +47,30 @@ const TwoColumnLayout = () => {
       }
   };
 
-  const handleSendMessage = () => {
-    // Handle sendMessage action
+  // Handle sendMessage action via send_message
+  const handleSendMessage = async () => {
+    try {
+        console.log('idInstance', idInstance);
+        console.log('apiTokenInstance', apiTokenInstance);
+        console.log('to', to);
+        console.log('message', message);
+      const response = await fetch(`${API_URL}/sendmessage`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'idInstance': idInstance,
+            'apiTokenInstance': apiTokenInstance
+          },
+        body: JSON.stringify({
+            chatId: to,
+            message: message
+        })
+      });
+      const data = await response.json();
+      setOutput(JSON.stringify(data, null, 2));
+    } catch (error) {
+      setOutput(`Error: ${error.message}`);
+    }
   };
 
   const handleSendFileByUrl = () => {
@@ -92,7 +114,7 @@ const TwoColumnLayout = () => {
           <div>
             <input
               type="text"
-              placeholder="77771234567"
+              placeholder="37498076869@c.us"
               maxLength="20"
               value={to}
               onChange={(e) => setTo(e.target.value)}
@@ -114,7 +136,7 @@ const TwoColumnLayout = () => {
           </div>
           <div>
             <input
-              placeholder="77771234567"
+              placeholder="37498076869@c.us"
               type="text"
               maxLength="20"
               value={to}

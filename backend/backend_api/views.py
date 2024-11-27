@@ -1,20 +1,13 @@
 # backend_api/views.py
 import logging
-import html
+import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import viewsets
 from rest_framework import status
-from rest_framework.response import Response  # Import Response
-from backend_api.models import YourModel  # Use absolute import
 from backend_api.serializers import YourModelSerializer  # Use absolute import
 from backend_api.api_utils import get_settings_from_api, get_state_instance_from_api, post_message, download_media_by_url, send_file_to_api
 from .serializers import RequestSerializer, SendMessageRequestSerializer, SendFileByUrlRequestSerializer
-
-class YourModelViewSet(viewsets.ModelViewSet):
-    queryset = YourModel.objects.all()
-    serializer_class = YourModelSerializer
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -129,11 +122,21 @@ def send_message(request):
             },
             status=status.HTTP_400_BAD_REQUEST)
 
-    #chat_id = request.POST.get('chatId')
-    chat_id = request.POST.get('chatId', '').replace('"', '')
-    message = request.POST.get('message')
-    quoted_message_id = request.POST.get('quotedMessageId', '')
-    link_preview = request.POST.get('linkPreview', '')
+    try:
+        request_data = json.loads(request.body)
+        chat_id = request_data.get('chatId')
+        message = request_data.get('message')
+        quoted_message_id = request_data.get('quotedMessageId', '')
+        link_preview = request_data.get('linkPreview', '')
+    except json.JSONDecodeError:
+        return JsonResponse(
+            {'error': 'Invalid JSON in request body'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # check if chat_id has number@*, if not add @c.us
+    if '@' not in chat_id:
+        chat_id = f"{chat_id}@c.us"
 
     request_data = {
         'chatId': chat_id,
