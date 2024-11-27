@@ -1,12 +1,12 @@
 import './App.css';
 import TwoColumnLayout from './TwoColumnLayout';
+import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
       <TwoColumnLayout />
+      <footer className="footer"></footer>
     </div>
   );
 }
